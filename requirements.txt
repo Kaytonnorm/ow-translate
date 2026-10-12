@@ -1,0 +1,9 @@
+# 锁定版本：Mac 与 Windows 使用同一版本（Python 3.12，64 位）
+# 镜像源为可选项，见 docs/paddle-windows-notes.md，不在此硬编码
+paddlepaddle==3.0.0
+paddleocr==3.0.3
+opencv-python-headless==4.10.0
+pillow==12.3.0
+rapidfuzz==3.14.6
+httpx==0.28.1
+pytest==9.1.1

@@ -1,0 +1,25 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+*.egg-info/
+
+# 环境与密钥
+.env
+.env.*
+!.env.example
+
+# 调试中间图
+debug/
+
+# 真实游戏截图（不外传）
+samples/real/
+
+# Node / Electron（阶段 4 起）
+node_modules/
+dist/
+out/
+
+# 系统
+.DS_Store
+Thumbs.db
