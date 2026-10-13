@@ -85,7 +85,9 @@ uv pip install --python .venv/bin/python -r requirements.txt
 
 ## 当前进度
 
-阶段 1 编码完成（待 reviewer 审核代码 → 用户确认后进入阶段 2）：
+阶段 1 完成（reviewer 第 1 轮：1 项阻塞[密钥流程]已修复——key 须作废轮换[待用户操作]、
+悬空对象已 gc 清除[git fsck 确认]、已加提交前自查规则；5 条建议全部落实，测试 22 项全过）。
+待 reviewer 复审确认后向用户汇总。
 
 - 环境：.venv（Python 3.12.14），依赖锁定见 requirements.txt。
 - 关键事实（Mac 上踩坑后修正）：paddleocr 3.0.3 与 paddlepaddle 3.0.0 不兼容 → 锁 paddleocr==3.7.0；
@@ -100,7 +102,7 @@ uv pip install --python .venv/bin/python -r requirements.txt
 | 功能 | 状态 |
 |---|---|
 | Mac 端到端（--image 全链路 + 翻译） | ✅ 已验证（Mac） |
-| pytest 18 项 | ✅ 已验证（Mac） |
+| pytest 22 项 | ✅ 已验证（Mac） |
 | --region 实时截屏（Mac 实现） | ✅ 已验证（Mac） |
 | platforms/windows 截图 + DPI 物理像素 | ❌ 未验证（待 docs/windows-checklist.md 第 3 项） |
 | Windows 依赖安装（VC++ Redist 等） | ❌ 未验证（待清单第 1 项） |
