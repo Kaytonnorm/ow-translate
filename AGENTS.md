@@ -26,6 +26,15 @@
 - 翻译合并、悬浮窗 Electron 原生穿透方案：已获用户确认。
 - 镜像源不硬编码，只在文档中作为可选项。
 - 阶段 1 不做 select_region.py；只支持 `--region` 手动传坐标，框选功能阶段 5 在 Electron 中实现。
+## 自动执行与审核流程
+
+- GLM 主 agent 负责计划、执行、调用 reviewer 和处理审核结果；不要要求用户转贴审核内容。
+- 开始时阅读项目 AGENTS.md 和相关文档，把计划写入 docs/plan.md。
+- 通过 Task 工具调用 reviewer 审核计划，并把计划路径、验收标准和当前阶段一并传给 reviewer。
+- 计划审核通过后直接继续执行，不等待用户确认。
+- 每完成一个阶段，运行该阶段要求的检查，再通过 Task 调用 reviewer 审核 diff。
+- reviewer 提出阻塞问题时，GLM 自行修复并重新审核；最多修复重审 3 轮，仍未通过时再报告阻塞原因。
+- 所有阶段验收和可运行的检查完成后，汇报完成内容、审核结论、检查结果，以及未能验证的项目。
 
 ## 目录结构
 
@@ -74,12 +83,23 @@ uv pip install --python .venv/bin/python -r requirements.txt
 
 ## 当前进度
 
-- 阶段 1 进行中。
-- docs/plan.md v3：已按 reviewer 意见修正（Windows 截屏实现纳入阶段 1、样例图命名、DPI aware 归属、translate 缺 key 测试、基线提交），计划已通过审核，开始编码。
-- 环境：.venv (Python 3.12.14) 已创建；依赖安装后台进行中（paddlepaddle 3.0.0 + paddleocr 3.0.3 等）。
+阶段 1 编码完成（待 reviewer 审核代码 → 用户确认后进入阶段 2）：
+
+- 环境：.venv（Python 3.12.14），依赖锁定见 requirements.txt。
+- 关键事实（Mac 上踩坑后修正）：paddleocr 3.0.3 与 paddlepaddle 3.0.0 不兼容 → 锁 paddleocr==3.7.0；
+  korean+v5 组合不在 lang 映射中 → 代码显式指定 korean_PP-OCRv5_mobile_rec + PP-OCRv5_mobile_det；
+  检测器只收 3 通道 → ocr.py 内部灰度转 BGR。
+- 已完成：config/preprocess/ocr/translate/main、platforms(base+mac+windows)、make_samples、
+  18 个单测全过、5 张样例端到端（含翻译）、--region/--debug/缺 key 降级验证。
+- 已知问题：韩英混排一行被拆成两行（"힐해줘 please"），阶段 2/3 观察是否影响去重与翻译。
 
 ## Windows 验证状态
 
 | 功能 | 状态 |
 |---|---|
-| （尚无可验证功能，随阶段推进更新） | — |
+| Mac 端到端（--image 全链路 + 翻译） | ✅ 已验证（Mac） |
+| pytest 18 项 | ✅ 已验证（Mac） |
+| --region 实时截屏（Mac 实现） | ✅ 已验证（Mac） |
+| platforms/windows 截图 + DPI 物理像素 | ❌ 未验证（待 docs/windows-checklist.md 第 3 项） |
+| Windows 依赖安装（VC++ Redist 等） | ❌ 未验证（待清单第 1 项） |
+| samples/real/ 真实截图 OCR 准确率报告 | ❌ 未验证（待用户提供截图） |
