@@ -119,6 +119,15 @@ class Translator:
                 translations = self._parse_response(resp.json(), len(texts))
                 return TranslateResult(translations=translations,
                                        elapsed_ms=(time.time() - t0) * 1000)
+            except httpx.HTTPStatusError as e:
+                # 4xx（key 无效、参数错）重试没有意义，直接终止
+                last_err = e
+                logger.warning("翻译请求失败（第 %d/%d 次尝试）: %s",
+                               attempt + 1, self.cfg.max_retries + 1, e)
+                if e.response.status_code < 500:
+                    break
+                if attempt < self.cfg.max_retries:
+                    time.sleep(0.5 * (attempt + 1))
             except (httpx.HTTPError, ValueError, KeyError, IndexError) as e:
                 last_err = e
                 logger.warning("翻译请求失败（第 %d/%d 次尝试）: %s",

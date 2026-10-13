@@ -28,11 +28,8 @@ class MacScreenCapture:
             return arr.copy()
 
     def physical_scale(self) -> tuple[float, float]:
-        # macOS：mss 直接返回物理像素，缩放因子不影响坐标；用主屏逻辑/物理宽比仅供参考
-        with mss.mss() as sct:
-            m = sct.monitors[0]
-            logical = m.get("width", 0)
-            return (1.0, 1.0) if not logical else (1.0, 1.0)
+        # macOS：mss 直接返回物理像素，坐标不受缩放因子影响，恒为 1.0
+        return (1.0, 1.0)
 
 
 def get_capture() -> MacScreenCapture:

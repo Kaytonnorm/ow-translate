@@ -8,7 +8,7 @@
 |---|---|
 | 桌面端 | Electron + TypeScript + Vue3。**悬浮窗置顶、鼠标穿透、全局快捷键、区域框选全部在 Electron 主进程实现** |
 | 后端 | Python 3.12 + FastAPI（阶段 2 引入 server） |
-| OCR | PaddleOCR 3.x（当前锁定 3.0.3）+ PaddlePaddle CPU 版 3.0.0 |
+| OCR | PaddleOCR 3.x（原计划 3.0.3，**勘误：实际锁定 3.7.0**——3.0.3 与 paddlepaddle 3.0.0 内部接口不兼容）+ PaddlePaddle CPU 版 3.0.0 |
 | 截图 | mss；Python 侧平台接口只有 ScreenCapture |
 | 预处理 | opencv-python-headless |
 | 翻译 | DeepSeek API（OpenAI 兼容），模型 ID 从配置读取（默认 `deepseek-flash`），`thinking disabled` + `reasoning_effort low` |

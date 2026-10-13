@@ -39,8 +39,12 @@ def setup_logging(verbose: bool) -> None:
 def save_debug_image(cfg: AppConfig, name: str, img) -> None:
     cfg.debug_dir.mkdir(parents=True, exist_ok=True)
     out = cfg.debug_dir / name
-    cv2.imwrite(str(out), img)
-    logger.debug("中间图已保存: %s", out)
+    # imencode + tofile：Windows 上项目路径含中文时 cv2.imwrite(ANSI 路径)会静默失败
+    ok, buf = cv2.imencode(out.suffix or ".png", img)
+    if ok:
+        buf.tofile(str(out))
+    else:
+        logger.warning("中间图编码失败: %s", name)
 
 
 def run_pipeline(cfg: AppConfig, bgr, args, source_desc: str) -> None:
